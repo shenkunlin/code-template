@@ -1,0 +1,32 @@
+package com.itheima.code.build;
+
+import freemarker.template.Template;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+/****
+ * @Author:shenkunlin
+ * @Description:Service构建
+ * @Date 2019/6/14 19:13
+ *****/
+public class ServiceBuilder {
+
+
+    /***
+     * 构建Service
+     * @param table
+     * @param Table
+     */
+    public static void builder(String table,String Table){
+        //生成Service层文件
+        BuilderFactory.builder(table,
+                Table,
+                "/template/service",
+                "Service.java",
+                TemplateBuilder.PACKAGE_SERVICE_INTERFACE,
+                "Service.java");
+    }
+
+}
