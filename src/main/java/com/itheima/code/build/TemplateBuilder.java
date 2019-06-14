@@ -114,19 +114,25 @@ public class TemplateBuilder {
                     //需要生成的Pojo属性集合
                     List<ModelInfo> models = new ArrayList<ModelInfo>();
                     //获取表所有的列
-                    ResultSet cloumnsSet = metaData.getColumns(database, "root", tableName, null);
+                    ResultSet cloumnsSet = metaData.getColumns(database, UNAME, tableName, null);
+                    //获取主键
+                    ResultSet keySet = metaData.getPrimaryKeys(database, UNAME, tableName);
+                    String key ="";
+                    while (keySet.next()){
+                        key=keySet.getString(4);
+                    }
+
                     while (cloumnsSet.next()){
                         //列的描述
                         String remarks = cloumnsSet.getString("REMARKS");
                         //获取列名
                        String columnName = cloumnsSet.getString("COLUMN_NAME");
-                       //处理列名
+                        //处理列名
                         String propertyName = StringUtils.replace_(columnName);
                        //获取类型，并转成JavaType
                        String javaType = JavaTypes.getType(cloumnsSet.getInt("DATA_TYPE"));
-
                        //创建该列的信息
-                       models.add(new ModelInfo(javaType, JavaTypes.simpleName(javaType),propertyName,StringUtils.firstUpper(propertyName),remarks, false));
+                       models.add(new ModelInfo(javaType, JavaTypes.simpleName(javaType),propertyName,StringUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,cloumnsSet.getString("IS_AUTOINCREMENT")));
                     }
                     //创建该表的JavaBean
                     Map<String,Object> modelMap = new HashMap<String,Object>();

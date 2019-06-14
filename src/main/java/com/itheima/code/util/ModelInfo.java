@@ -19,14 +19,36 @@ public class ModelInfo {
     private String desc;
     //是否是主键
     private Boolean id;
+    //列名
+    private String column;
+    //是否自增  YES自增，NO：非自增
+    private String identity;
 
-    public ModelInfo(String type, String simpleType, String name, String upperName, String desc, Boolean id) {
+    public ModelInfo(String type, String simpleType, String name, String upperName, String desc, Boolean id,String column,String identity) {
         this.type = type;
         this.simpleType = simpleType;
         this.name = name;
         this.upperName = upperName;
         this.desc = desc;
         this.id = id;
+        this.column = column;
+        this.identity=identity;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
+    }
+
+    public String getColumn() {
+        return column;
+    }
+
+    public void setColumn(String column) {
+        this.column = column;
     }
 
     public String getType() {

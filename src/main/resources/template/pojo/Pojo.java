@@ -23,7 +23,11 @@ public class ${Table} implements Serializable{
 	</#if>
 	<#if model.id==true>
 	@Id
+	<#if model.identity=='YES'>
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	</#if>
+	</#if>
+    @Column(name = "${model.column}")
 	private ${model.simpleType} ${model.name};//${model.desc!""}
 </#list>
 
