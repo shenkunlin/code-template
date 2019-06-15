@@ -31,6 +31,7 @@ public class ${Table} implements Serializable{
 	</#if>
     @Column(name = "${model.column}")
 	private ${model.simpleType} ${model.name};//${model.desc!""}
+
 </#list>
 
 

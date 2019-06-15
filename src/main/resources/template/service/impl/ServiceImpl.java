@@ -75,27 +75,16 @@ public class ${Table}ServiceImpl implements ${Table}Service {
         Example example=new Example(${Table}.class);
         Example.Criteria criteria = example.createCriteria();
         if(${table}!=null){
-            //此处根据对象要求
-            // ${Table}名称
-            //if(!StringUtils.isEmpty(${table}.getName())){
-            //    criteria.andLike("name","%"+${table}.getName()+"%");
-            //}
-            // ${Table}图片地址
-            //if(!StringUtils.isEmpty(${table}.getImage())){
-            //    criteria.andLike("image","%"+${table}.getImage()+"%");
-            //}
-            // ${Table}的首字母
-            //if(!StringUtils.isEmpty(${table}.getLetter())){
-            //    criteria.andLike("letter","%"+${table}.getLetter()+"%");
-            //}
-            // ${Table}id
-            //if(!StringUtils.isEmpty(${table}.getLetter())){
-            //    criteria.andEqualTo("id",${table}.getId());
-            //}
-            // 排序
-            //if(!StringUtils.isEmpty(${table}.getSeq())){
-            //    criteria.andEqualTo("seq",${table}.getSeq());
-            //}
+            <#list models as md>
+            // ${md.desc}
+            if(!StringUtils.isEmpty(${table}.get${md.upperName}())){
+                <#if (md.name?contains("title") || md.name?contains("name"))>
+                    criteria.andLike("${md.name}","%"+${table}.get${md.upperName}()+"%");
+                <#else>
+                    criteria.andEqualTo("${md.name}",${table}.get${md.upperName}());
+                </#if>
+            }
+            </#list>
         }
         return example;
     }
