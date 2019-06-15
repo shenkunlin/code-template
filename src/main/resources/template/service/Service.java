@@ -37,7 +37,7 @@ public interface ${Table}Service {
      * 删除${Table}
      * @param id
      */
-    void delete(Integer id);
+    void delete(${keyType} id);
 
     /***
      * 修改${Table}数据
@@ -56,7 +56,7 @@ public interface ${Table}Service {
      * @param id
      * @return
      */
-     ${Table} findById(Integer id);
+     ${Table} findById(${keyType} id);
 
     /***
      * 查询所有${Table}

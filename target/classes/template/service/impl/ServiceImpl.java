@@ -105,7 +105,7 @@ public class ${Table}ServiceImpl implements ${Table}Service {
      * @param id
      */
     @Override
-    public void delete(Integer id){
+    public void delete(${keyType} id){
         ${table}Mapper.deleteByPrimaryKey(id);
     }
 
@@ -133,7 +133,7 @@ public class ${Table}ServiceImpl implements ${Table}Service {
      * @return
      */
     @Override
-    public ${Table} findById(Integer id){
+    public ${Table} findById(${keyType} id){
         return  ${table}Mapper.selectByPrimaryKey(id);
     }
 

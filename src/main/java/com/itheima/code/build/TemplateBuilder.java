@@ -99,25 +99,16 @@ public class TemplateBuilder {
                     //大写对象
                     String Table =StringUtils.firstUpper(table);
 
-                    //创建Controller
-                    ControllerBuilder.builder(table,Table);
-
-                    //创建Dao
-                    DaoBuilder.builder(table, Table);
-
-                    //创建Service接口
-                    ServiceBuilder.builder(table,Table);
-
-                    //创建ServiceImpl实现类
-                    ServiceImplBuilder.builder(table,Table);
-
                     //需要生成的Pojo属性集合
                     List<ModelInfo> models = new ArrayList<ModelInfo>();
+                    //所有需要导包的类型
+                    Set<String> typeSet = new HashSet<String>();
+
                     //获取表所有的列
                     ResultSet cloumnsSet = metaData.getColumns(database, UNAME, tableName, null);
                     //获取主键
                     ResultSet keySet = metaData.getPrimaryKeys(database, UNAME, tableName);
-                    String key ="";
+                    String key ="",keyType="";
                     while (keySet.next()){
                         key=keySet.getString(4);
                     }
@@ -133,17 +124,39 @@ public class TemplateBuilder {
                        String javaType = JavaTypes.getType(cloumnsSet.getInt("DATA_TYPE"));
                        //创建该列的信息
                        models.add(new ModelInfo(javaType, JavaTypes.simpleName(javaType),propertyName,StringUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,cloumnsSet.getString("IS_AUTOINCREMENT")));
+                       //需要导包的类型
+                        typeSet.add(javaType);
+                        //主键类型
+                        if(columnName.equals(key)){
+                            keyType=JavaTypes.simpleName(javaType);
+                        }
                     }
                     //创建该表的JavaBean
                     Map<String,Object> modelMap = new HashMap<String,Object>();
-                    //表信息存储
                     modelMap.put("table",table);
                     modelMap.put("Table",Table);
                     modelMap.put("swagger",SWAGGER);
                     modelMap.put("TableName",tableName);
                     modelMap.put("models",models);
+                    modelMap.put("typeSet",typeSet);
+                    //主键操作
+                    modelMap.put("keySetMethod","set"+StringUtils.firstUpper(StringUtils.replace_(key)));
+                    modelMap.put("keyType",keyType);
+
                     //创建JavaBean
                     PojoBuilder.builder(modelMap);
+
+                    //创建Controller
+                    ControllerBuilder.builder(modelMap);
+
+                    //创建Dao
+                    DaoBuilder.builder(modelMap);
+
+                    //创建Service接口
+                    ServiceBuilder.builder(modelMap);
+
+                    //创建ServiceImpl实现类
+                    ServiceImplBuilder.builder(modelMap);
                 }
             }
         } catch (SQLException e) {

@@ -16,13 +16,11 @@ public class ControllerBuilder {
 
     /***
      * 构建Controller
-     * @param table
-     * @param Table
+     * @param modelMap
      */
-    public static void builder(String table,String Table){
+    public static void builder(Map<String,Object> modelMap){
         //生成Controller层文件
-        BuilderFactory.builder(table,
-                Table,
+        BuilderFactory.builder(modelMap,
                 "/template/controller",
                 "Controller.java",
                 TemplateBuilder.PACKAGE_CONTROLLER,

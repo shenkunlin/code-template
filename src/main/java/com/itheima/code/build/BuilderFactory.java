@@ -15,11 +15,9 @@ public class BuilderFactory {
 
     /***
      * 构建Controller
-     * @param table
-     * @param Table
+     * @param modelMap
      */
-    public static void builder(String table,        //表优化后的名字
-                                String Table,        //优化后，首字母大写
+    public static void builder(Map<String,Object> modelMap,//数据模型
                                 String templatePath, //模板路径
                                 String templateFile, //模板文件
                                 String storePath,    //存储路径
@@ -27,11 +25,6 @@ public class BuilderFactory {
         try {
             //获取模板对象
             Template template = TemplateUtil.loadTemplate(ControllerBuilder.class.getResource(templatePath).getPath(), templateFile);
-
-            //创建模板数据
-            Map<String,Object> dataModel = new HashMap<String,Object>();
-            dataModel.put("table",table);
-            dataModel.put("Table",Table);
 
             //创建文件夹
             String path = TemplateBuilder.PROJECT_PATH+storePath.replace(".","/");
@@ -41,7 +34,7 @@ public class BuilderFactory {
             }
 
             //创建文件
-            TemplateUtil.writer(template,dataModel,path+"/"+Table+suffix);
+            TemplateUtil.writer(template,modelMap,path+"/"+modelMap.get("Table")+suffix);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -16,13 +16,11 @@ public class ServiceBuilder {
 
     /***
      * 构建Service
-     * @param table
-     * @param Table
+     * @param modelMap
      */
-    public static void builder(String table,String Table){
+    public static void builder(Map<String,Object> modelMap){
         //生成Service层文件
-        BuilderFactory.builder(table,
-                Table,
+        BuilderFactory.builder(modelMap,
                 "/template/service",
                 "Service.java",
                 TemplateBuilder.PACKAGE_SERVICE_INTERFACE,

@@ -3,9 +3,11 @@ package ${package_pojo};
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+<#list typeSet as set>
+import ${set};
+</#list>
 /****
  * @Author:shenkunlin
  * @Description:${Table}构建

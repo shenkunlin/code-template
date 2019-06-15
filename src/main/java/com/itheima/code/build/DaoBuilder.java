@@ -16,13 +16,11 @@ public class DaoBuilder {
 
     /***
      * 构建Dao
-     * @param table
-     * @param Table
+     * @param modelMap
      */
-    public static void builder(String table,String Table){
+    public static void builder(Map<String,Object> modelMap){
         //生成Dao层文件
-        BuilderFactory.builder(table,
-                Table,
+        BuilderFactory.builder(modelMap,
                 "/template/dao",
                 "Mapper.java",
                 TemplateBuilder.PACKAGE_MAPPER,
