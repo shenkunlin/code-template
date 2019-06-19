@@ -35,6 +35,9 @@ public class TemplateBuilder {
     //controllerPackage
     public static String PACKAGE_CONTROLLER;
 
+    //feignPackage
+    public static String PACKAGE_FEIGN;
+
     //数据库账号
     public static String UNAME;
 
@@ -43,6 +46,9 @@ public class TemplateBuilder {
 
     //是否使用swagger
     public static Boolean SWAGGER;
+
+    //服务名字
+    public static String SERVICENAME;
 
     static {
         try {
@@ -58,8 +64,10 @@ public class TemplateBuilder {
             PACKAGE_SERVICE_INTERFACE = props.getProperty("serviceInterfacePackage");
             PACKAGE_SERVICE_INTERFACE_IMPL = props.getProperty("serviceInterfaceImplPackage");
             PACKAGE_CONTROLLER = props.getProperty("controllerPackage");
+            PACKAGE_FEIGN= props.getProperty("feignPackage");
             UNAME = props.getProperty("uname");
             SWAGGER = Boolean.valueOf(props.getProperty("enableSwagger"));
+            SERVICENAME = props.getProperty("serviceName");
             //工程路径
             PROJECT_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/java/";
 
@@ -142,6 +150,7 @@ public class TemplateBuilder {
                     //主键操作
                     modelMap.put("keySetMethod","set"+StringUtils.firstUpper(StringUtils.replace_(key)));
                     modelMap.put("keyType",keyType);
+                    modelMap.put("serviceName",SERVICENAME);
 
                     //创建JavaBean
                     PojoBuilder.builder(modelMap);
@@ -157,6 +166,9 @@ public class TemplateBuilder {
 
                     //创建ServiceImpl实现类
                     ServiceImplBuilder.builder(modelMap);
+
+                    //创建Feign
+                    FeignBuilder.builder(modelMap);
                 }
             }
         } catch (SQLException e) {
