@@ -54,4 +54,16 @@ public class JavaTypes {
         return type.replace("java.lang.","").replaceFirst("java.util.","");
     }
 
+    /***
+     * 去掉数据类型的包，并且首字母小写
+     * @param type
+     * @return
+     */
+    public static  String simpleNameLowerFirst(String type){
+        //去掉前缀
+        type = simpleName(type);
+        //将第一个字母转成小写
+        return StringUtils.firstLower(type);
+    }
+
 }

@@ -16,6 +16,15 @@ public class StringUtils {
         return str.substring(0,1).toUpperCase()+str.substring(1);
     }
 
+    /**
+     * 首字母小写
+     * @param str
+     * @return
+     */
+    public static String firstLower(String str){
+        return str.substring(0,1).toLowerCase()+str.substring(1);
+    }
+
     /***
      * 移除tab_,tb_
      * @return

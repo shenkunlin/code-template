@@ -1,9 +1,10 @@
 package com.itheima.code.build;
 
-import com.itheima.code.util.JavaTypes;
-import com.itheima.code.util.ModelInfo;
-import com.itheima.code.util.StringUtils;
-import javafx.scene.control.Tab;
+import com.itheima.code.swagger.SwaggerMethod;
+import com.itheima.code.swagger.SwaggerModel;
+import com.itheima.code.swagger.SwaggerModelProperties;
+import com.itheima.code.swagger.SwaggerPath;
+import com.itheima.code.util.*;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -50,6 +51,9 @@ public class TemplateBuilder {
     //服务名字
     public static String SERVICENAME;
 
+    //swagger-ui路径
+    public static String SWAGGERUI_PATH;
+
     static {
         try {
             //加载配置文件
@@ -68,6 +72,7 @@ public class TemplateBuilder {
             UNAME = props.getProperty("uname");
             SWAGGER = Boolean.valueOf(props.getProperty("enableSwagger"));
             SERVICENAME = props.getProperty("serviceName");
+            SWAGGERUI_PATH = props.getProperty("swaggeruipath");
             //工程路径
             PROJECT_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/java/";
 
@@ -98,6 +103,9 @@ public class TemplateBuilder {
                 //获取数据库名字
                 String database = conn.getCatalog();
 
+                //Swagger信息集合
+                List<SwaggerModel> swaggerModels = new ArrayList<SwaggerModel>();
+
                 //循环所有表信息
                 while (tableResultSet.next()){
                     //获取表名
@@ -121,6 +129,14 @@ public class TemplateBuilder {
                         key=keySet.getString(4);
                     }
 
+                    //构建SwaggerModel对象
+                    SwaggerModel swaggerModel = new SwaggerModel();
+                    swaggerModel.setName(Table);
+                    swaggerModel.setType("object");
+                    swaggerModel.setDescription(Table);
+                    //属性集合
+                    List<SwaggerModelProperties> swaggerModelProperties = new ArrayList<SwaggerModelProperties>();
+
                     while (cloumnsSet.next()){
                         //列的描述
                         String remarks = cloumnsSet.getString("REMARKS");
@@ -138,7 +154,21 @@ public class TemplateBuilder {
                         if(columnName.equals(key)){
                             keyType=JavaTypes.simpleName(javaType);
                         }
+
+                        //SwaggerModelProperties创建
+                        SwaggerModelProperties modelProperties = new SwaggerModelProperties();
+                        modelProperties.setName(propertyName);
+                        modelProperties.setType(JavaTypes.simpleNameLowerFirst(javaType));
+                        if(modelProperties.getType().equals("integer")){
+                            modelProperties.setFormat("int32");
+                        }
+                        modelProperties.setDescription(remarks);
+                        swaggerModelProperties.add(modelProperties);
                     }
+                    //属性集合
+                    swaggerModel.setProperties(swaggerModelProperties);
+                    swaggerModels.add(swaggerModel);
+
                     //创建该表的JavaBean
                     Map<String,Object> modelMap = new HashMap<String,Object>();
                     modelMap.put("table",table);
@@ -170,11 +200,46 @@ public class TemplateBuilder {
                     //创建Feign
                     FeignBuilder.builder(modelMap);
                 }
+
+                //构建Swagger文档数据-JSON数据
+                Map<String,Object> swaggerModelMap = new HashMap<String,Object>();
+                swaggerModelMap.put("swaggerModels",swaggerModels);
+                //生成Swagger文件
+                SwaggerBuilder.builder(swaggerModelMap);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    /***
+     * 初始化方法信息
+     * @param Table
+     * @return
+     */
+    public static List<SwaggerPath> swaggerMethodInit(String Table,String table){
+        //集合存储
+        List<SwaggerPath> swaggerPaths = new ArrayList<SwaggerPath>();
+
+        //初始化路径
+        SwaggerPath swaggerPath = new SwaggerPath();
+        swaggerPath.setPath(table); // /brand
+
+        return  null;
+    }
+
+    public SwaggerMethod getMethod(String Table,String table){
+        //构建一个Get方法
+        SwaggerMethod method = new SwaggerMethod();
+        method.setMethod("get");
+        method.setTags(Table+"Controller");
+        method.setSummary("查询所有"+Table);
+        method.setDescription("查询所"+Table+"有方法详情");
+        method.setOperationId("findAllUsingGET");
+        method.setConsumes("application/json");
+        method.setProduces("application/json");
+
+        return method;
+    }
 
 }
