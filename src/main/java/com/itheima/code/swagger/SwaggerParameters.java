@@ -23,6 +23,28 @@ public class SwaggerParameters {
     //引用对象
     private String schema;
 
+    //类型
+    private String type;
+
+    //format
+    private String format;
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getIn() {
         return in;
     }

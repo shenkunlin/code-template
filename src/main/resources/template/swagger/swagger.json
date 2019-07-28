@@ -1,98 +1,84 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "畅购",
-    "version": "1.0",
-    "title": "文档",
-    "termsOfService": "http://localhost:18081"
-  },
-  "host": "localhost:18081",
-  "basePath": "/",
-  "tags": [
-    {
-      "name": "brand-controller",
-      "description": "Brand Controller"
+    "description": "微服务工程代码生成器,生成Dao、Service、Controller、Pojo、Feign、Swagger的JSON脚本",
+    "version": "1.0.0",
+    "title": "深圳黑马训练营代码生成器",
+    "termsOfService": "https://github.com/shenkunlin/code-template.git",
+    "contact": {
+      "email": "shenkunlin@itcast.cn"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
+  },
+  "host": "petstore.swagger.io",
+  "basePath": "/v2",
+  "tags": [
+    <#list swaggerPathList as sph>
+    {
+      "name": "${sph.model}Controller",
+      "description": "${sph.model}Controller"
+    }<#if ((sph_index+1)<(swaggerPathList?size))>,</#if>
+    </#list>
   ],
-  "produces": [
-    "application/json"
+  "schemes": [
+    "http"
   ],
   "paths": {
-    "/album": {
-      "get": {
+    <#list swaggerPathList as spath>
+    "${spath.path}": {
+      <#list spath.methods as smethod>
+      "${smethod.method}": {
         "tags": [
-          "AlbumController"
+          "${spath.model}Controller"
         ],
-        "summary": "Album查询所有",
-        "description": "查询所Album有方法详情",
-        "operationId": "findAllUsingGET",
+        "summary": "${smethod.summary}",
+        "description": "${smethod.description}",
+        "operationId": "${smethod.operationId}",
         "consumes": [
-          "application/json"
+          "${smethod.consumes}"
         ],
         "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Result«Album»"
-            }
-          },
-          "500": {
-            "description": "服务器异常"
-          },
-          "403": {
-            "description": "拒绝请求"
-          },
-          "404": {
-            "description": "找不到路径"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "AlbumController"
-        ],
-        "summary": "Album添加",
-        "description": "添加Album方法详情",
-        "operationId": "addUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
+          "${smethod.produces}"
         ],
         "parameters": [
+          <#if smethod.swaggerParameters??>
+          <#list smethod.swaggerParameters as sp>
           {
-            "in": "body",
-            "name": "Album对象",
-            "description": "传入JSON数据",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Album"
-            }
-          }
+            "in": "${sp.in}",
+            "name": "${sp.name}",
+            "description": "${sp.description}",
+            "required": ${sp.required?string("true","false")}
+            <#if sp.schema??>
+              ,
+              "schema": {
+                "$ref": "${sp.schema}"
+              }
+            </#if>
+          }<#if ((sp_index+1)<(smethod.swaggerParameters?size))>,</#if>
+          </#list>
+          </#if>
         ],
         "responses": {
-          "200": {
-            "description": "OK",
+          <#if smethod.responses??>
+          <#list smethod.responses as resp>
+          "${resp.code}": {
+            "description": "${resp.description}"
+            <#if resp.schema??>,
             "schema": {
-              "$ref": "#/definitions/Result"
+              "$ref": "${resp.schema}"
             }
-          },
-          "500": {
-            "description": "服务器异常"
-          },
-          "403": {
-            "description": "拒绝请求"
-          },
-          "404": {
-            "description": "找不到路径"
-          }
+            </#if>
+          }<#if ((resp_index+1)<(smethod.responses?size))>,</#if>
+          </#list>
+          </#if>
         }
-      }
-    }
+      }<#if ((smethod_index+1)<(spath.methods?size))>,</#if>
+      </#list>
+    }<#if ((spath_index+1)<(swaggerPathList?size))>,</#if>
+  </#list>
   },
   "definitions": {
     "Result": {
@@ -209,5 +195,9 @@
       "description": "${sm.name}"
     }<#if ((sm_index+1)<(swaggerModels?size))>,</#if>
     </#list>
+  },
+  "externalDocs": {
+    "description": "黑马训练营畅购微服务商城(http://www.itheima.com)",
+    "url": "https://github.com/shenkunlin/code-template.git"
   }
 }

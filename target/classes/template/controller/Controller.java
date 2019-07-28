@@ -39,7 +39,7 @@ public class ${Table}Controller {
     </#if>
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<PageInfo> findPage(@RequestBody(required = false) <#if swagger==true>@ApiParam(name = "${Table}对象",value = "传入JSON数据",required = false)</#if> ${Table} ${table}, @PathVariable  int page, @PathVariable  int size){
-        //执行搜索
+        //调用${Table}Service实现分页条件查询${Table}
         PageInfo<${Table}> pageInfo = ${table}Service.findPage(${table}, page, size);
         return new Result(true,StatusCode.OK,"查询成功",pageInfo);
     }
@@ -59,7 +59,7 @@ public class ${Table}Controller {
     </#if>
     @GetMapping(value = "/search/{page}/{size}" )
     public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
-        //分页查询
+        //调用${Table}Service实现分页查询${Table}
         PageInfo<${Table}> pageInfo = ${table}Service.findPage(page, size);
         return new Result<PageInfo>(true,StatusCode.OK,"查询成功",pageInfo);
     }
@@ -74,6 +74,7 @@ public class ${Table}Controller {
     </#if>
     @PostMapping(value = "/search" )
     public Result<List<${Table}>> findList(@RequestBody(required = false) <#if swagger==true>@ApiParam(name = "${Table}对象",value = "传入JSON数据",required = false)</#if> ${Table} ${table}){
+        //调用${Table}Service实现条件查询${Table}
         List<${Table}> list = ${table}Service.findList(${table});
         return new Result<List<${Table}>>(true,StatusCode.OK,"查询成功",list);
     }
@@ -89,6 +90,7 @@ public class ${Table}Controller {
     </#if>
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable ${keyType} id){
+        //调用${Table}Service实现根据主键删除
         ${table}Service.delete(id);
         return new Result(true,StatusCode.OK,"删除成功");
     }
@@ -107,7 +109,7 @@ public class ${Table}Controller {
     public Result update(@RequestBody <#if swagger==true>@ApiParam(name = "${Table}对象",value = "传入JSON数据",required = false)</#if> ${Table} ${table},@PathVariable ${keyType} id){
         //设置主键值
         ${table}.${keySetMethod}(id);
-        //修改数据
+        //调用${Table}Service实现修改${Table}
         ${table}Service.update(${table});
         return new Result(true,StatusCode.OK,"修改成功");
     }
@@ -122,6 +124,7 @@ public class ${Table}Controller {
     </#if>
     @PostMapping
     public Result add(@RequestBody  <#if swagger==true>@ApiParam(name = "${Table}对象",value = "传入JSON数据",required = true)</#if> ${Table} ${table}){
+        //调用${Table}Service实现添加${Table}
         ${table}Service.add(${table});
         return new Result(true,StatusCode.OK,"添加成功");
     }
@@ -137,7 +140,7 @@ public class ${Table}Controller {
     </#if>
     @GetMapping("/{id}")
     public Result<${Table}> findById(@PathVariable ${keyType} id){
-        //根据ID查询
+        //调用${Table}Service实现根据主键查询${Table}
         ${Table} ${table} = ${table}Service.findById(id);
         return new Result<${Table}>(true,StatusCode.OK,"查询成功",${table});
     }
@@ -147,11 +150,12 @@ public class ${Table}Controller {
      * @return
      */
     <#if swagger==true>
-    @ApiOperation(value = "${Table}查询所有",notes = "查询所${Table}有方法详情",tags = {"${Table}Controller"})
+    @ApiOperation(value = "查询所有${Table}",notes = "查询所${Table}有方法详情",tags = {"${Table}Controller"})
     </#if>
     @GetMapping
-    public Result<${Table}> findAll(){
+    public Result<List<${Table}>> findAll(){
+        //调用${Table}Service实现查询所有${Table}
         List<${Table}> list = ${table}Service.findAll();
-        return new Result<${Table}>(true, StatusCode.OK,"查询成功",list) ;
+        return new Result<List<${Table}>>(true, StatusCode.OK,"查询成功",list) ;
     }
 }

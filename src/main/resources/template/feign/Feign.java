@@ -77,5 +77,5 @@ public interface ${Table}Feign {
      * @return
      */
     @GetMapping
-    Result<${Table}> findAll();
+    Result<List<${Table}>> findAll();
 }

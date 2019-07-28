@@ -37,23 +37,7 @@ public class SwaggerMethod {
     private List<SwaggerResponse> responses;
 
     //参数设置
-    private SwaggerParameters swaggerParameters;
-
-    public List<SwaggerResponse> getResponses() {
-        return responses;
-    }
-
-    public void setResponses(List<SwaggerResponse> responses) {
-        this.responses = responses;
-    }
-
-    public SwaggerParameters getSwaggerParameters() {
-        return swaggerParameters;
-    }
-
-    public void setSwaggerParameters(SwaggerParameters swaggerParameters) {
-        this.swaggerParameters = swaggerParameters;
-    }
+    private List<SwaggerParameters> swaggerParameters;
 
     public String getUrl() {
         return url;
@@ -117,5 +101,21 @@ public class SwaggerMethod {
 
     public void setProduces(String produces) {
         this.produces = produces;
+    }
+
+    public List<SwaggerResponse> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<SwaggerResponse> responses) {
+        this.responses = responses;
+    }
+
+    public List<SwaggerParameters> getSwaggerParameters() {
+        return swaggerParameters;
+    }
+
+    public void setSwaggerParameters(List<SwaggerParameters> swaggerParameters) {
+        this.swaggerParameters = swaggerParameters;
     }
 }
