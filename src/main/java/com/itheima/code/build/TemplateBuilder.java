@@ -2,7 +2,6 @@ package com.itheima.code.build;
 
 import com.itheima.code.swagger.*;
 import com.itheima.code.util.*;
-import javafx.scene.control.Tab;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -96,8 +95,10 @@ public class TemplateBuilder {
             //针对MySQL数据库进行相关生成操作
             if(databaseType.equals("MySQL")){
                 //获取所有表结构
-                ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[]{"TABLE"});
-
+//                ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[]{"TABLE"});
+//                替换获取表名称方法
+                PreparedStatement preparedStatement = conn.prepareStatement("show tables");
+                ResultSet tableNameResultSet = preparedStatement.executeQuery();
                 //获取数据库名字
                 String database = conn.getCatalog();
 
@@ -106,9 +107,9 @@ public class TemplateBuilder {
                 List<SwaggerPath> swaggerPathList = new ArrayList<SwaggerPath>();    //Method
 
                 //循环所有表信息
-                while (tableResultSet.next()){
+                while (tableNameResultSet.next()){
                     //获取表名
-                    String tableName=tableResultSet.getString("TABLE_NAME");
+                    String tableName=tableNameResultSet.getString(1);
                     //名字操作,去掉tab_,tb_，去掉_并转驼峰
                     String table = StringUtils.replace_(StringUtils.replaceTab(tableName));
                     //大写对象
